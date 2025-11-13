@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lcreurope</title>
+
+<link rel="icon" type="image/png" href="https://frutasalifruit.com/wp-content/uploads/grupoalifruit.png" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bp-tablet:768px; --bp-desktop:1024px;
+    --topbar-h:58px;
+    --sidebar-w:270px;
+
+    --panel:#000; --ink:#fff; --border:#1f1f1f;
+    --active:#ff6a21;
+    --content-bg:#fff; --fb:#ff6a21;
+
+    --footer-ink:#111;
+    --footer-dark:#111;
+    --footer-legal:#f7f7f7;
+
+    --ticker-h:40px; --ticker-bg:#950ed3; --ticker-ink:#fff; --ticker-sep:#fff;
+  }
+
+  @media (min-width:768px) and (max-width:1023.98px){ :root{ --topbar-h:60px; } }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Open Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--content-bg);color:#111;
+    padding-bottom:var(--ticker-h);
+  }
+
+  /* ===== TOPBAR (móvil/tablet) ===== */
+  .topbar{position:fixed;inset:0 0 auto 0;height:var(--topbar-h);display:flex;align-items:center;z-index:100;background:var(--panel);color:var(--ink);border-bottom:1px solid var(--border)}
+  .topbar__in{width:100%;max-width:1200px;margin:0 auto;height:100%;padding:0 14px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .brand-link{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+  .logo-sm{width:28px;height:28px;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:transparent}
+  @media (max-width:1023.98px){.logo-sm{width:31px;height:31px}}
+  .logo-sm img{width:100%;height:100%;object-fit:contain}
+  .brand-name{color:var(--ink);font-weight:800;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .right-actions{display:flex;align-items:center;gap:8px}
+  .btn-icon{width:36px;height:36px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:#0f0f0f;color:var(--ink)}
+  .btn-icon:active{transform:translateY(1px)}
+  .btn-icon:focus-visible{outline:2px solid #3aa3ff;outline-offset:2px}
+
+  /* ===== Drawer ===== */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;visibility:hidden;transition:.2s;z-index:99}
+  .scrim.open{opacity:1;visibility:visible}
+  .drawer{position:fixed;top:0;left:0;bottom:0;width:80vw;max-width:360px;background:#141414;color:var(--ink);border-right:1px solid #1e1e1e;transform:translateX(-100%);transition:transform .25s;z-index:100;display:flex;flex-direction:column}
+  .drawer.open{transform:translateX(0)}
+  .d-top{height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;border-bottom:1px solid #1f1f1f}
+  .d-brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .d-brand-link{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+  .d-close{width:32px;height:32px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;border:1px solid #2a2a2a;background:#101010;color:#e5e7eb}
+  .drawer .menu{overflow:auto;padding:20px 0 10px}
+  .drawer .menu ul{list-style:none}
+  .drawer .menu li{border-top:1px solid #111}
+  .drawer .menu li:first-child{border-top:none}
+  .drawer .menu a{display:block;padding:14px 18px;text-decoration:none;color:#e5e7eb;font-weight:600;transition:color .15s;border-radius:10px;text-align:left}
+  .drawer .menu a:hover,.drawer .menu a:focus-visible{color:var(--active)}
+  .drawer .menu a.active{color:var(--active)}
+  .submenu{display:none}
+  @media (max-width:1023.98px){.submenu{display:none !important}}
+
+  /* ===== SIDEBAR (solo desktop) ===== */
+  .left{display:none}
+  @media (min-width:1024px){
+    .topbar{display:none}
+    .left{display:flex;position:fixed;inset:0 auto 0 0;width:var(--sidebar-w);background:var(--panel);color:var(--ink);border-right:1px solid var(--border);flex-direction:column;align-items:center;padding:18px 16px;text-align:center;z-index:1}
+    .left .logo-lg{width:200px;height:auto;object-fit:contain;display:block;margin:6px auto 58px auto}
+    .menu-d ul{list-style:none;display:flex;flex-direction:column;gap:16px;align-items:center}
+    .menu-d a{color:var(--ink);text-decoration:none;font-weight:600;text-transform:uppercase;letter-spacing:.6px;padding:8px 12px;display:inline-block;border:1px solid transparent;border-radius:12px;transition:color .15s;text-align:center;min-width:200px;font-size:15px}
+    .menu-d a:hover,.menu-d a:focus-visible{color:var(--active)}
+    .menu-d a.active{color:var(--active)}
+    .foot{margin-top:auto;text-align:center;padding:22px 0 10px;width:100%}
+    .foot .social{display:flex;gap:10px;justify-content:center;align-items:center;margin-bottom:12px}
+    .foot .social a{width:21px;height:21px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;line-height:1;background:var(--fb);color:#000;border:2px solid var(--fb)}
+    .foot .copy{width:220px;margin:20px auto 0;font-size:11px;line-height:1.35;color:#fff;text-transform:uppercase;letter-spacing:.4px}
+    .foot .copy a{color:#fff;text-decoration:none;border-bottom:1px dotted #5a5a5a}
+  }
+
+  /* ===== CONTENIDO ===== */
+  main{min-height:100svh;background:var(--content-bg);padding:0;padding-top:var(--topbar-h);position:relative;z-index:0}
+  @media (min-width:1024px){main{margin-left:var(--sidebar-w);padding-top:0}}
+
+  /* ===== HERO ===== */
+  .hero{margin:0;position:relative}
+  .hero img{display:block;width:100%;height:auto}
+
+  .hero__ctrl{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;border:none;background:rgba(0,0,0,.3);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(3px)}
+  .hero__ctrl:hover{background:rgba(0,0,0,.55)}
+  .hero__prev{left:12px}
+  .hero__next{right:12px}
+  .hero__dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:7px;background:rgba(255,255,255,.50);padding:4px 10px;border-radius:16px}
+  .hero__dot{width:10px;height:10px;border-radius:999px;background:rgba(0,0,0,.25);border:none;cursor:pointer}
+  .hero__dot.is-active{background:#111;width:18px}
+
+  /* =================== PIE DE PÁGINA =================== */
+  footer{margin-top:40px}
+  .footer-news{height:91px;display:flex;align-items:center;justify-content:center;gap:18px;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:400}
+  .footer-news .icons{display:flex;gap:18px;align-items:center}
+  .footer-news .icons a{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#111;text-decoration:none;border:1px solid #dcdcdc}
+
+  .ff-grid{background:var(--footer-dark);color:#fff;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px}
+  .ff-wrap{max-width:1200px;margin:0 auto;display:grid;gap:24px;grid-template-columns:1fr;align-items:flex-start;grid-template-areas:"prods" "about" "brand" "contact"}
+  .ff-products{grid-area:prods}
+  .ff-about{grid-area:about}
+  .ff-brand{grid-area:brand}
+  .ff-contact{grid-area:contact}
+  .ff-title{font-weight:800;color:#e9f4ec;margin-bottom:10px;font-size:18px}
+  .ff-list{list-style:none;display:grid;gap:8px}
+  .ff-list a{color:#e8fff0;font-weight:700;text-decoration:none}
+  .ff-list a:hover{text-decoration:underline}
+  .brand-box{display:flex;flex-direction:column;gap:14px;align-items:center}
+  .brand-box img{max-width:220px;height:auto;object-fit:contain;display:block}
+  .social{display:flex;gap:12px;align-items:center;justify-content:center}
+  .social a{width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid #d8d8d8;color:#d8d8d8}
+  .social a:hover{background:#f1f1f1;color:#333}
+  .contact{display:grid;gap:14px}
+  .ci{display:flex;align-items:flex-start;gap:12px;color:#fff;line-height:1.55}
+  .ci .round{width:38px;height:38px;border-radius:50%;background:#ff6a21;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:16px;flex:0 0 38px}
+  .ci a{color:#fff;text-decoration:none}
+  .ci a:hover{opacity:.85}
+
+  @media (max-width:767.98px){
+    .ff-title{font-size:16px}
+    .ff-list a{font-size:13px}
+    .ff-wrap{grid-template-columns:1fr 1fr;grid-template-areas:"prods about" "brand brand" "contact contact"}
+  }
+  @media (min-width:768px){
+    .ff-title{font-size:20px}
+    .ff-list a{font-size:14px}
+    .brand-box img{max-width:200px}
+    .ff-wrap{grid-template-columns:1.1fr 1fr 1fr 1.2fr;grid-template-areas:"brand prods about contact"}
+  }
+  @media (min-width:1024px){
+    .ff-title{font-size:22px}
+    .brand-box img{max-width:220px}
+  }
+
+  .footer-legal{background:var(--footer-legal);color:#000;text-align:center;padding:18px 12px 26px 12px;font-family:Arial,Helvetica,sans-serif;font-size:12px}
+  .footer-legal .links{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;font-size:14px}
+  .footer-legal .links a{color:#000;text-decoration:underline}
+  .footer-legal .country{opacity:.8;font-size:14px}
+
+  @media (min-width:1024px){footer{margin-left:var(--sidebar-w)}}
+
+  /* ===== TICKER INFERIOR ===== */
+  .ticker{position:fixed;right:0;bottom:0;height:var(--ticker-h);left:0;background:var(--ticker-bg);color:var(--ticker-ink);z-index:200;overflow:hidden;border-top:1px solid #950ed3}
+  @media (min-width:1024px){.ticker{left:var(--sidebar-w)}}
+  .ticker__track{display:flex;gap:64px;align-items:center;height:100%;white-space:nowrap;will-change:transform;animation:ticker-move 30s linear infinite;padding-left:24px}
+  .ticker__inner{display:flex;gap:64px;align-items:center}
+  .ticker__item{display:inline-flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.5px;font-size:16px;text-transform:uppercase;color:var(--ticker-ink)}
+  .ticker__sep{opacity:.95;color:var(--ticker-sep)}
+  .ticker a{color:var(--ticker-ink);text-decoration:none}
+  .ticker a:hover{text-decoration:underline}
+  @keyframes ticker-move{from{transform:translateX(0)}to{transform:translateX(-150%)}}
+
+  a,button{-webkit-tap-highlight-color:transparent}
+  a:focus,button:focus{outline:none}
+
+  /* ============ ZONA APPLE ============ */
+  :root{
+    --za-title-fs:26px;
+    --za-ver-todos-w:120.83px;
+    --za-ver-todos-h:42px;
+    --za-ver-todos-fs:13px;
+    --za-promo-w:327.5px;
+    --za-promo-h:540px;
+    --za-card-img:210.63px;
+    --za-name-fs:15px;
+    --za-brand-fs:14.25px;
+    --za-stars-w:75.63px;
+    --za-stars-h:15px;
+    --za-stock-fs:15px;
+    --za-price-fs:15px;
+    --za-btn-w:210.63px;
+    --za-btn-h:42px;
+    --za-btn-fs:15px;
+    --za-sku-fs:13.5px;
+  }
+
+  .zone-apple-wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 14px;background:#fff;position:relative;z-index:1}
+  /* 🔧 Ajuste pedido: mitad del espacio → 10px */
+  @media (min-width:1024px){
+    .zone-apple-wrap{margin-left:0;padding-left:10px}
+  }
+
+  .zone-apple{display:flex;flex-direction:column;font-family:Arial,Helvetica,sans-serif;background:#fff;position:relative;z-index:1}
+
+  .za-head{display:flex;align-items:center;justify-content:space-between;margin:12px 0}
+  .za-title{font-size:var(--za-title-fs);font-weight:800}
+  .za-ver-todos{
+    width:var(--za-ver-todos-w);height:var(--za-ver-todos-h);
+    display:inline-flex;align-items:center;justify-content:center;
+    border-radius:24px;border:1px solid #e7e7e7;background:#f7f7fb;
+    text-decoration:none;color:#111;font-weight:700;font-size:var(--za-ver-todos-fs);
+  }
+
+  .za-grid{display:grid;gap:22px;grid-template-columns:1fr}
+  @media (min-width:1024px){.za-grid{grid-template-columns: var(--za-promo-w) 1fr}}
+
+  /* PROMO: Desktop visible; Tablet y Móvil oculto */
+  .za-promo{width:var(--za-promo-w);height:var(--za-promo-h);background:#000 url("https://kyscomunicaciones.com/wp-content/uploads/2025/02/bg-banner-home-1.png") center/cover no-repeat;border-radius:16px;overflow:hidden;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.14);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:18px}
+  .za-promo .up{opacity:.9;font-weight:800;letter-spacing:.6px;font-size:var(--za-title-fs);text-align:center}
+  .za-promo h3{font-size:var(--za-title-fs);font-weight:800;margin:8px 0 14px;text-align:center}
+  .za-promo .btn{display:inline-flex;align-items:center;justify-content:center;border:none;background:#7f54ff;color:#fff;border-radius:12px;cursor:pointer;height:42px;padding:0 18px;font-weight:800;font-size:15px}
+  @media (max-width:1023.98px){ .za-promo{display:none !important} }
+
+  /* CARDS */
+  .za-cards{display:grid;gap:22px;grid-template-columns:1fr}
+  @media (min-width:768px) and (max-width:1023.98px){ .za-cards{grid-template-columns:repeat(4,1fr)} }
+  @media (min-width:1024px){ .za-cards{grid-template-columns:repeat(4,1fr)} }
+
+  .za-card{border:1px solid #ececf1;border-radius:14px;background:#fff;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 4px 16px rgba(17,17,26,.05);position:relative;z-index:1}
+  .za-thumb{width:var(--za-card-img);height:var(--za-card-img);margin:6px auto 8px;display:block;object-fit:contain;image-rendering:auto}
+  .za-name{font-size:var(--za-name-fs);font-weight:800;line-height:1.1}
+  .za-brand{font-size:var(--za-brand-fs);color:#7a7a7a}
+  .za-stars{width:var(--za-stars-w);height:var(--za-stars-h);display:flex;align-items:center;justify-content:space-between}
+  .za-stars i{font-size:var(--za-stars-h);color:#c7c7c7;line-height:1}
+  .za-stock{display:flex;align-items:center;gap:8px;color:#0aa84f;font-weight:800;font-size:var(--za-stock-fs)}
+  .za-price{color:#7f54ff;font-weight:800;font-size:var(--za-price-fs)}
+  .za-btn{width:var(--za-btn-w);height:var(--za-btn-h);display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:12px;border:1px solid transparent;background:#1e40af;color:#fff;text-decoration:none;font-weight:800;font-size:var(--za-btn-fs);cursor:pointer;margin:0 auto}
+  .za-btn:hover{background:#1d4ed8}
+  .za-sku{color:#9c9c9c;font-size:var(--za-sku-fs)}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar" aria-label="Barra superior">
+  <div class="topbar__in">
+    <a class="brand-link" href="index.html" aria-label="Ir al inicio">
+      <div class="brand">
+        <div class="logo-sm" aria-hidden="true">
+          <img src="https://lcreurope.com/wp-content/uploads/2025/10/Gemini_Generated_Image_sc2s83sc2s83sc2s-removebg-preview.png" alt="">
+        </div>
+        <span class="brand-name">Lcreurope</span>
+      </div>
+    </a>
+    <div class="right-actions">
+      <button class="btn-icon" id="btnMenu" aria-label="Abrir menú"><i class="fa fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+
+<!-- DRAWER -->
+<aside class="drawer" id="drawer" aria-label="Menú principal">
+  <div class="d-top">
+    <a class="d-brand-link" href="index.html" aria-label="Ir al inicio">
+      <div class="d-brand">
+        <div class="logo-sm" aria-hidden="true">
+          <img src="https://lcreurope.com/wp-content/uploads/2025/10/Gemini_Generated_Image_sc2s83sc2s83sc2s-removebg-preview.png" alt="">
+        </div>
+        <span class="brand-name">Lcreurope</span>
+      </div>
+    </a>
+    <button class="d-close" id="btnClose" aria-label="Cerrar menú"><i class="fa fa-times"></i></button>
+  </div>
+  <nav class="menu" role="navigation">
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="apple.html">Apple</a></li>
+      <li><a href="samsung.html">Samsung  </a></li>
+      <li><a href="xiaomi.html">Xiaomi</a></li>
+      <li><a href="honor.html">Honor</a></li>
+      <li><a href="motorola.html">Motola</a></li>
+      <li><a href="zte.html">ZTE</a></li>
+      <li><a href="poco.html">Poco by xiaomi</a></li>
+      <li><a href="infinix.html">Infinix</a></li>
+      <li><a href="accesorios.html">Accesorios</a></li>       
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- ====== LATERAL IZQUIERDO (desktop) ====== -->
+<aside id="leftHeader" class="left" aria-label="Encabezado izquierdo">
+  <a href="index.html" aria-label="Ir al inicio">
+    <img class="logo-lg" src="https://frutasalifruit.com/wp-content/uploads/grupoalifruit.png" alt="Alifruit – Sabor de la Tierra" />
+  </a>
+
+  <nav class="menu-d" aria-label="Menú principal">
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="apple.html">Apple</a></li>
+      <li><a href="samsung.html">Samsung  </a></li>
+      <li><a href="xiaomi.html">Xiaomi</a></li>
+      <li><a href="honor.html">Honor</a></li>
+      <li><a href="motorola.html">Motola</a></li>
+      <li><a href="zte.html">ZTE</a></li>
+      <li><a href="poco.html">Poco by xiaomi</a></li>
+      <li><a href="infinix.html">infinix</a></li>       
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <div class="foot">
+    <div class="social">
+      <a class="fb" aria-label="Facebook" href="https://www.facebook.com/Grupo-Alifruit-Sabor-de-la-Tierra-1671097156478760/" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i></a>
+      <a class="yt" aria-label="YouTube" href="https://www.youtube.com/" target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i></a>
+    </div>
+    <div class="copy">
+      <div>Todos los derechos reservados</div>
+      <div>Lcreurope © 2025 | Diseño Web |</div>
+      <div><a href="http://guellcom.com/" target="_blank" rel="noopener">GuellCom_</a></div>
+    </div>
+  </div>
+</aside>
+<!-- ====== FIN LATERAL IZQUIERDO ====== -->
+
+<main>
+  <!-- HERO -->
+  <section class="hero" aria-label="Imagen de cabecera">
+    <img id="heroImg"
+         src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/2.png"
+         alt="Banner principal">
+
+    <button class="hero__ctrl hero__prev" id="heroPrev" aria-label="Anterior">
+      <i class="fa-solid fa-angle-left"></i>
+    </button>
+    <button class="hero__ctrl hero__next" id="heroNext" aria-label="Siguiente">
+      <i class="fa-solid fa-angle-right"></i>
+    </button>
+    <div class="hero__dots" id="heroDots" aria-label="Selector de diapositivas"></div>
+  </section>
+
+  <!-- ============ ZONA APPLE ============ -->
+  <section class="zone-apple-wrap" aria-label="Zona Apple">
+    <div class="zone-apple">
+      <div class="za-head">
+        <h2 class="za-title">Zona Apple</h2>
+        <a class="za-ver-todos" href="apple.html">Ver Todos</a>
+      </div>
+
+      <div class="za-grid">
+        <!-- PROMO: visible solo Desktop -->
+        <aside class="za-promo">
+          <div class="up">DESCUENTOS EN</div>
+          <h3>Equipos Apple</h3>
+          <button class="btn" type="button">Ver Equipos</button>
+        </aside>
+
+        <!-- CARDS -->
+        <div class="za-cards">
+          <article class="za-card">
+            <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/CELU1023NATURAL-TITANIO-256GB_0-600x600.jpg" alt="iPhone 16 Pro Max 256GB">
+            <div class="za-name">IPHONE 16 PRO MAX 256GB</div>
+            <div class="za-brand">Apple, Equipos</div>
+            <div class="za-stars" aria-label="0 estrellas">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+            </div>
+            <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
+            <div class="za-price">S/ 4,650.00</div>
+            <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
+            <div class="za-sku">SKU: M46-1</div>
+          </article>
+
+          <article class="za-card">
+            <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/CELU1023NATURAL-TITANIO-256GB_0-600x600.jpg" alt="iPhone 16 Pro Max 256GB">
+            <div class="za-name">IPHONE 16 PRO MAX 256GB</div>
+            <div class="za-brand">Apple, Equipos</div>
+            <div class="za-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+            </div>
+            <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
+            <div class="za-price">S/ 4,550.00</div>
+            <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
+            <div class="za-sku">SKU: M46</div>
+          </article>
+
+          <article class="za-card">
+            <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/CELU1023NATURAL-TITANIO-256GB_0-600x600.jpg" alt="iPhone 16 Pro Max 256GB">
+            <div class="za-name">IPHONE 16 PRO MAX 256GB</div>
+            <div class="za-brand">Apple, Equipos</div>
+            <div class="za-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+            </div>
+            <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
+            <div class="za-price">S/ 4,350.00</div>
+            <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
+            <div class="za-sku">SKU: M46-1-2</div>
+          </article>
+
+          <article class="za-card">
+            <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/CELU1023NATURAL-TITANIO-256GB_0-600x600.jpg" alt="iPhone 16 Pro 256GB">
+            <div class="za-name">IPHONE 16 PRO 256GB</div>
+            <div class="za-brand">Apple, Equipos</div>
+            <div class="za-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+            </div>
+            <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
+            <div class="za-price">S/ 4,280.00</div>
+            <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
+            <div class="za-sku">SKU: M45</div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ============ FIN ZONA APPLE ============ -->
+
+</main>
+
+<!-- =================== PIE DE PÁGINA =================== -->
+<footer>
+  <div class="footer-news" role="region" aria-label="Mantente informado">
+    <span>¡Mantente informado!</span>
+    <div class="icons">
+      <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+    </div>
+  </div>
+
+  <section class="ff-grid">
+    <div class="ff-wrap">
+      <div class="ff-products">
+        <h3 class="ff-title">Celulares</h3>
+        <ul class="ff-list">
+          <li><a href="apple.html">Apple</a></li>
+          <li><a href="samsung.html">Samsung  </a></li>
+          <li><a href="xiaomi.html">Xiaomi</a></li>
+          <li><a href="honor.html">Honor</a></li>
+          <li><a href="motorola.html">Motola</a></li>
+          <li><a href="zte.html">ZTE</a></li>
+          <li><a href="poco.html">Poco by xiaomi</a></li>
+          <li><a href="infinix.html">Infinix</a></li>
+        </ul>
+      </div>
+
+      <div class="ff-about">
+        <h3 class="ff-title">Sobre Nosotros</h3>
+        <ul class="ff-list">
+          <li><a href="somos.html">Quiénes Somos</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="certificaciones.html">Certificaciones</a></li>
+          <li><a href="calidad.html">Calidad</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="ff-brand">
+        <div class="brand-box">
+          <img src="https://frutasalifruit.com/wp-content/uploads/grupoalifruit.png" alt="Logo">
+          <div class="social" aria-label="Redes sociales">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="ff-contact">
+        <h3 class="ff-title">Contacto</h3>
+        <div class="contact">
+          <div class="ci">
+            <span class="round"><i class="fa-solid fa-phone-volume"></i></span>
+            <div><a href="tel:+905375207022">+51 902 188 353</a></div>
+          </div>
+          <div class="ci">
+            <span class="round"><i class="fa-solid fa-envelope"></i></span>
+            <div><a href="mailto:info@freshfruitturkey.com">info@freshfruitturkey.com</a></div>
+          </div>
+          <div class="ci">
+            <span class="round"><i class="fa-solid fa-location-dot"></i></span>
+            <div>Güzeloba Mah. Çağlayangil Cad. No: 3B, 07230<br>Muratpaşa / Antalya</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer-legal">
+    <div class="links">
+      <a href="#">Términos y condiciones</a>
+      <a href="#">Política de cookies</a>
+      <a href="#">Política de privacidad</a>
+    </div>
+    <div class="country">Yarphonestore.com – Perú.</div>
+  </section>
+</footer>
+
+<!-- ===== TICKER INFERIOR ===== -->
+<div class="ticker" role="region" aria-label="Avisos y contacto">
+  <div class="ticker__track">
+    <div class="ticker__inner">
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+    </div>
+    <div class="ticker__inner" aria-hidden="true">
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ====== Drawer ======
+  const drawer=document.getElementById('drawer');
+  const scrim=document.getElementById('scrim');
+  const btnMenu=document.getElementById('btnMenu');
+  const btnClose=document.getElementById('btnClose');
+
+  const openDrawer=()=>{drawer.classList.add('open');scrim.classList.add('open');};
+  const closeDrawer=()=>{drawer.classList.remove('open');scrim.classList.remove('open');};
+
+  btnMenu?.addEventListener('click',openDrawer);
+  btnClose?.addEventListener('click',closeDrawer);
+  scrim?.addEventListener('click',closeDrawer);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeDrawer));
+
+  // ====== SLIDER CABECERA ======
+  const heroImg = document.getElementById('heroImg');
+  const heroDotsContainer = document.getElementById('heroDots');
+  const btnPrev = document.getElementById('heroPrev');
+  const btnNext = document.getElementById('heroNext');
+
+  const heroSrcs = [
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/1-1.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/2.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/3.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/4.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/5.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/5.png"
+  ];
+
+  let currentIndex = 0;
+  let sliderTimer = null;
+
+  // precarga
+  heroSrcs.forEach(src => { const img = new Image(); img.src = src; });
+
+  // dots
+  const dots = [];
+  heroSrcs.forEach((_, idx) => {
+    const dot = document.createElement('button');
+    dot.className = 'hero__dot' + (idx === 0 ? ' is-active' : '');
+    dot.type = 'button';
+    dot.setAttribute('aria-label','Ir a la imagen '+(idx+1));
+    dot.addEventListener('click', () => goToSlide(idx, true));
+    heroDotsContainer.appendChild(dot);
+    dots.push(dot);
+  });
+
+  function updateDots(index){ dots.forEach((d,i)=> d.classList.toggle('is-active', i===index)); }
+
+  function goToSlide(index, stopAuto){
+    currentIndex = (index + heroSrcs.length) % heroSrcs.length;
+    heroImg.src = heroSrcs[currentIndex];
+    updateDots(currentIndex);
+    if(stopAuto){ restartAuto(); }
+  }
+
+  btnPrev.addEventListener('click', () => goToSlide(currentIndex - 1, true));
+  btnNext.addEventListener('click', () => goToSlide(currentIndex + 1, true));
+
+  function startAuto(){ sliderTimer = setInterval(() => goToSlide(currentIndex + 1, false), 2000); }
+  function restartAuto(){ if(sliderTimer){ clearInterval(sliderTimer); } startAuto(); }
+  startAuto();
+</script>
+
+</body>
+</html>
