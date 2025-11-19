@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Apple - Lcreurope</title>
+
+<link rel="icon" type="image/png" href="https://frutasalifruit.com/wp-content/uploads/grupoalifruit.png" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bp-tablet:768px; --bp-desktop:1024px;
+    --topbar-h:58px; --sidebar-w:270px;
+    --panel:#000; --ink:#fff; --border:#1f1f1f;
+    --active:#ff6a21; --content-bg:#fff; --fb:#ff6a21;
+    --footer-ink:#111; --footer-dark:#111; --footer-legal:#f7f7f7;
+    --ticker-h:40px; --ticker-bg:#950ed3; --ticker-ink:#fff; --ticker-sep:#fff;
+
+    /* Apple page */
+    --apple-accent:#a020f0;
+    --apple-blue:#1d4ed8;
+    --apple-bg:#f5f6f8;
+    --apple-card-radius:18px;
+  }
+  @media (min-width:768px) and (max-width:1023.98px){ :root{ --topbar-h:60px; } }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Open Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--apple-bg);color:#111;padding-bottom:var(--ticker-h);
+  }
+
+  /* ===== TOPBAR (móvil/tablet) ===== */
+  .topbar{position:fixed;inset:0 0 auto 0;height:var(--topbar-h);display:flex;align-items:center;z-index:100;background:var(--panel);color:var(--ink);border-bottom:1px solid var(--border)}
+  .topbar__in{width:100%;max-width:1200px;margin:0 auto;height:100%;padding:0 14px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .brand-link{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+  .logo-sm{width:28px;height:28px;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:transparent}
+  @media (max-width:1023.98px){.logo-sm{width:31px;height:31px}}
+  .logo-sm img{width:100%;height:100%;object-fit:contain}
+  .brand-name{color:var(--ink);font-weight:800;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .right-actions{display:flex;align-items:center;gap:8px}
+  .btn-icon{width:36px;height:36px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:#0f0f0f;color:var(--ink)}
+  .btn-icon:active{transform:translateY(1px)}
+  .btn-icon:focus-visible{outline:2px solid #3aa3ff;outline-offset:2px}
+
+  /* ===== Drawer ===== */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;visibility:hidden;transition:.2s;z-index:99}
+  .scrim.open{opacity:1;visibility:visible}
+  .drawer{position:fixed;top:0;left:0;bottom:0;width:80vw;max-width:360px;background:#141414;color:var(--ink);border-right:1px solid #1e1e1e;transform:translateX(-100%);transition:transform .25s;z-index:100;display:flex;flex-direction:column}
+  .drawer.open{transform:translateX(0)}
+  .d-top{height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;border-bottom:1px solid #1f1f1f}
+  .d-brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .d-brand-link{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+  .d-close{width:32px;height:32px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;border:1px solid #2a2a2a;background:#101010;color:#e5e7eb}
+  .drawer .menu{overflow:auto;padding:20px 0 10px}
+  .drawer .menu ul{list-style:none}
+  .drawer .menu li{border-top:1px solid #111}
+  .drawer .menu li:first-child{border-top:none}
+  .drawer .menu a{display:block;padding:14px 18px;text-decoration:none;color:#e5e7eb;font-weight:600;transition:color .15s;border-radius:10px;text-align:left}
+  .drawer .menu a:hover,.drawer .menu a:focus-visible{color:var(--active)}
+  .drawer .menu a.active{color:var(--active)}
+  .submenu{display:none}
+  @media (max-width:1023.98px){.submenu{display:none !important}}
+
+  /* ===== SIDEBAR (solo desktop) ===== */
+  .left{display:none}
+  @media (min-width:1024px){
+    .topbar{display:none}
+    .left{display:flex;position:fixed;inset:0 auto 0 0;width:var(--sidebar-w);background:var(--panel);color:var(--ink);border-right:1px solid var(--border);flex-direction:column;align-items:center;padding:18px 16px;text-align:center;z-index:1}
+    .left .logo-lg{width:200px;height:auto;object-fit:contain;display:block;margin:6px auto 58px auto}
+    .menu-d ul{list-style:none;display:flex;flex-direction:column;gap:16px;align-items:center}
+    .menu-d a{color:var(--ink);text-decoration:none;font-weight:600;text-transform:uppercase;letter-spacing:.6px;padding:8px 12px;display:inline-block;border:1px solid transparent;border-radius:12px;transition:color .15s;text-align:center;min-width:200px;font-size:15px}
+    .menu-d a:hover,.menu-d a:focus-visible{color:var(--active)}
+    .menu-d a.active{color:var(--active)}
+    .foot{margin-top:auto;text-align:center;padding:22px 0 10px;width:100%}
+    .foot .social{display:flex;gap:10px;justify-content:center;align-items:center;margin-bottom:12px}
+    .foot .social a{width:21px;height:21px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;line-height:1;background:var(--fb);color:#000;border:2px solid var(--fb)}
+    .foot .copy{width:220px;margin:20px auto 0;font-size:11px;line-height:1.35;color:#fff;text-transform:uppercase;letter-spacing:.4px}
+    .foot .copy a{color:#fff;text-decoration:none;border-bottom:1px dotted #5a5a5a}
+  }
+
+  /* ===== CONTENIDO ===== */
+  main{min-height:100svh;background:transparent;padding:0;padding-top:var(--topbar-h);position:relative;z-index:0}
+  @media (min-width:1024px){main{margin-left:var(--sidebar-w);padding-top:0}}
+
+  /* ===== HERO ===== */
+  .hero{margin:0;position:relative}
+  .hero img{display:block;width:100%;height:auto}
+  .hero__ctrl{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;border:none;background:rgba(0,0,0,.3);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(3px)}
+  .hero__ctrl:hover{background:rgba(0,0,0,.55)}
+  .hero__prev{left:12px}
+  .hero__next{right:12px}
+  .hero__dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:7px;background:rgba(255,255,255,.50);padding:4px 10px;border-radius:16px}
+  .hero__dot{width:10px;height:10px;border-radius:999px;background:rgba(0,0,0,.25);border:none;cursor:pointer}
+  .hero__dot.is-active{background:#111;width:18px}
+
+  /* ===== LISTADO APPLE ===== */
+  .apple-page{
+    margin-top:32px;
+    padding:0 16px 40px 16px;
+  }
+  @media (min-width:1024px){
+    .apple-page{
+      /* margen simétrico entre sidebar negro y borde derecho */
+      padding:0 60px 40px 60px;
+    }
+  }
+
+  .apple-wrap{
+    width:100%;
+    max-width:none;
+    margin:0;
+    display:grid;
+    grid-template-columns:320px minmax(0,1fr);
+    gap:32px;
+  }
+  @media (max-width:991.98px){
+    .apple-wrap{
+      grid-template-columns:1fr;
+    }
+  }
+
+  /* buscador */
+  .apple-search-row{
+    margin-bottom:18px;
+  }
+  .apple-search{
+    width:100%;
+    max-width:100%;
+    position:relative;
+  }
+  .apple-search input{
+    width:100%;
+    height:46px;
+    border-radius:999px;
+    border:1px solid #e5e7eb;
+    padding:0 52px 0 16px;
+    font-size:14px;
+    outline:none;
+    background:#fff;
+  }
+  .apple-search input:focus{
+    border-color:var(--apple-accent);
+    box-shadow:0 0 0 1px rgba(160,32,240,.2);
+  }
+  .apple-search button{
+    position:absolute;
+    right:4px;
+    top:4px;
+    bottom:4px;
+    width:38px;
+    border-radius:999px;
+    border:none;
+    background:var(--apple-accent);
+    color:#fff;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* filtro lateral */
+  .apple-filter{
+    background:#fff;
+    border-radius:16px;
+    padding:18px 18px 14px;
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+    border:1px solid #e5e7eb;
+    max-width:280px;
+    margin:0;
+  }
+  @media (max-width:991.98px){
+    .apple-filter{
+      display:none;
+    }
+  }
+  .apple-filter h3{
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:16px;
+  }
+
+  .apple-range-track{
+    width:100%;
+    height:4px;
+    border-radius:999px;
+    background:#e5e7eb;
+    position:relative;
+    margin-bottom:14px;
+  }
+  .apple-range-fill{
+    position:absolute;
+    inset:0 30% 0 10%;
+    border-radius:999px;
+    background:var(--apple-accent);
+  }
+
+  .apple-filter-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:10px;
+  }
+
+  .apple-filter-label{
+    display:flex;
+    flex-direction:column;
+    font-size:13px;
+    color:#374151;
+  }
+  .apple-filter-label span:first-child{
+    margin-bottom:2px;
+  }
+  .apple-filter-label span:last-child{
+    font-weight:700;
+  }
+
+  .apple-filter-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 16px;
+    height:32px;
+    border-radius:8px;
+    border:1px solid #bfdbfe;
+    cursor:pointer;
+    background:#e5edff;
+    color:#2563eb;
+    font-size:12px;
+    font-weight:700;
+    box-shadow:none;
+  }
+  .apple-filter-btn:hover{background:#dbeafe}
+
+  .apple-filter-divider{
+    margin-top:8px;
+    margin-bottom:10px;
+    border:0;
+    border-top:1px solid #e5e7eb;
+  }
+
+  .apple-filter-section{
+    border-top:none;
+    padding-top:4px;
+    font-size:13px;
+    font-weight:600;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+  }
+  .apple-filter-section i{font-size:12px;color:#6b7280}
+
+  .apple-products{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .apple-breadcrumbs{
+    font-size:13px;
+    color:#6b7280;
+  }
+  .apple-breadcrumbs span+span::before{
+    content:"/";
+    margin:0 4px;
+    color:#9ca3af;
+  }
+
+  .apple-toolbar{
+    margin-top:8px;
+    margin-bottom:10px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  .apple-sidebar-toggle{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    border:none;
+    background:transparent;
+    padding:0;
+    cursor:pointer;
+    font-size:14px;
+    color:#111827;
+    font-weight:600;
+  }
+  .apple-sidebar-toggle i{font-size:14px;}
+  .apple-sort select{
+    min-width:180px;
+    height:34px;
+    border-radius:8px;
+    border:1px solid #e5e7eb;
+    padding:0 10px;
+    font-size:13px;
+    background:#fff;
+    color:#374151;
+  }
+
+  .apple-top-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  .apple-title{
+    font-size:24px;
+    font-weight:800;
+  }
+  .apple-results{
+    font-size:13px;
+    color:#6b7280;
+  }
+
+  /* GRID */
+  .apple-grid{
+    display:grid;
+    gap:18px;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  @media (min-width:768px){
+    .apple-grid{
+      grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+  }
+  @media (min-width:1024px){
+    .apple-grid{
+      grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+  }
+
+  .apple-card{
+    background:#fff;
+    border-radius:var(--apple-card-radius);
+    padding:16px 16px 18px;
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+    border:1px solid #e5e7eb;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .apple-card-badge{
+    position:absolute;
+    top:12px;
+    right:12px;
+    background:var(--apple-accent);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    padding:4px 8px;
+    border-radius:999px;
+  }
+  .apple-img{
+    width:100%;
+    max-width:210px;
+    margin:6px auto 10px;
+  }
+  .apple-img img{
+    width:100%;
+    height:auto;
+    display:block;
+    object-fit:contain;
+  }
+  .apple-name{
+    font-size:15px;
+    font-weight:800;
+    margin-bottom:4px;
+    text-transform:uppercase;
+  }
+  .apple-brand{
+    font-size:13px;
+    color:#6b7280;
+    margin-bottom:6px;
+  }
+  .apple-stars{
+    font-size:13px;
+    color:#d1d5db;
+    margin-bottom:6px;
+  }
+  .apple-stars i{margin-right:2px;}
+  .apple-stock{
+    font-size:13px;
+    font-weight:700;
+    color:var(--apple-accent);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:6px;
+  }
+  .apple-stock i{font-size:13px;}
+  .apple-price{
+    font-size:15px;
+    font-weight:800;
+    color:#ec4899;
+    margin-bottom:10px;
+  }
+  .apple-price del{
+    font-weight:600;
+    color:#9ca3af;
+    margin-right:6px;
+  }
+  .apple-btn{
+    margin-top:auto;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    height:40px;
+    border-radius:10px;
+    background:var(--apple-blue);
+    color:#fff;
+    font-size:13px;
+    font-weight:800;
+    border:none;
+    cursor:pointer;
+    white-space:nowrap;
+    padding:0 14px;
+  }
+  .apple-btn i{margin-right:8px;}
+  .apple-btn:hover{background:#1e40af;}
+  .apple-sku{
+    margin-top:8px;
+    font-size:12px;
+    color:#6b7280;
+  }
+
+  /* PAGINACIÓN */
+  .apple-pagination{
+    margin-top:22px;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+  }
+  .apple-page-btn{
+    min-width:30px;
+    height:30px;
+    border-radius:8px;
+    border:none;
+    background:transparent;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    color:#111827;
+  }
+  .apple-page-btn.is-active{
+    background:var(--apple-accent);
+    color:#fff;
+  }
+
+  .sr-only{
+    position:absolute;
+    width:1px;
+    height:1px;
+    padding:0;
+    margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
+
+  /* ===== PIE DE PÁGINA ===== */
+  footer{margin-top:40px}
+  .footer-news{height:91px;display:flex;align-items:center;justify-content:center;gap:18px;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif;font-size:12px}
+  .footer-news .icons{display:flex;gap:18px;align-items:center}
+  .footer-news .icons a{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#111;text-decoration:none;border:1px solid #dcdcdc}
+
+  .ff-grid{background:var(--footer-dark);color:#fff;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px}
+  .ff-wrap{max-width:1200px;margin:0 auto;display:grid;gap:24px;grid-template-columns:1fr;align-items:flex-start;grid-template-areas:"prods" "about" "brand" "contact"}
+  .ff-products{grid-area:prods}
+  .ff-about{grid-area:about}
+  .ff-brand{grid-area:brand}
+  .ff-contact{grid-area:contact}
+  .ff-title{font-weight:800;color:#e9f4ec;margin-bottom:10px;font-size:18px}
+  .ff-list{list-style:none;display:grid;gap:8px}
+  .ff-list a{color:#e8fff0;font-weight:700;text-decoration:none}
+  .ff-list a:hover{text-decoration:underline}
+  .brand-box{display:flex;flex-direction:column;gap:14px;align-items:center}
+  .brand-box img{max-width:220px;height:auto;object-fit:contain;display:block}
+  .social{display:flex;gap:12px;align-items:center;justify-content:center}
+  .social a{width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid #d8d8d8;color:#d8d8d8}
+  .social a:hover{background:#f1f1f1;color:#333}
+  .contact{display:grid;gap:14px}
+  .ci{display:flex;align-items:flex-start;gap:12px;color:#fff;line-height:1.55}
+  .ci .round{width:38px;height:38px;border-radius:50%;background:#ff6a21;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:16px;flex:0 0 38px}
+  .ci a{color:#fff;text-decoration:none}
+  .ci a:hover{opacity:.85}
+  @media (max-width:767.98px){
+    .ff-title{font-size:16px}
+    .ff-list a{font-size:13px}
+    .ff-wrap{grid-template-columns:1fr 1fr;grid-template-areas:"prods about" "brand brand" "contact contact"}
+  }
+  @media (min-width:768px){
+    .ff-title{font-size:20px}
+    .ff-list a{font-size:14px}
+    .brand-box img{max-width:200px}
+    .ff-wrap{grid-template-columns:1.1fr 1fr 1fr 1.2fr;grid-template-areas:"brand prods about contact"}
+  }
+  @media (min-width:1024px){
+    .ff-title{font-size:22px}
+    .brand-box img{max-width:220px}
+  }
+  .footer-legal{background:var(--footer-legal);color:#000;text-align:center;padding:18px 12px 26px 12px}
+  .footer-legal .links{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;font-size:14px}
+  .footer-legal .links a{color:#000;font-weight:800;text-decoration:underline}
+  .footer-legal .country{opacity:.9;font-weight:700}
+  @media (min-width:1024px){footer{margin-left:var(--sidebar-w)}}
+
+  /* ===== TICKER ===== */
+  .ticker{position:fixed;right:0;bottom:0;height:var(--ticker-h);left:0;background:var(--ticker-bg);color:var(--ticker-ink);z-index:200;overflow:hidden;border-top:1px solid #950ed3}
+  @media (min-width:1024px){.ticker{left:var(--sidebar-w)}}
+  .ticker__track{display:flex;gap:64px;align-items:center;height:100%;white-space:nowrap;will-change:transform;animation:ticker-move 30s linear infinite;padding-left:24px}
+  .ticker__inner{display:flex;gap:64px;align-items:center}
+  .ticker__item{display:inline-flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.5px;font-size:16px;text-transform:uppercase;color:var(--ticker-ink)}
+  .ticker__sep{opacity:.95;color:var(--ticker-sep)}
+  .ticker a{color:var(--ticker-ink);text-decoration:none}
+  .ticker a:hover{text-decoration:underline}
+  @keyframes ticker-move{from{transform:translateX(0)}to{transform:translateX(-150%)}}
+
+  a,button{-webkit-tap-highlight-color:transparent}
+  a:focus,button:focus{outline:none}
+</style>
+</head>
+<body>
+<!-- HEADER / MENÚ IGUAL QUE ANTES -->
+<header class="topbar" aria-label="Barra superior">
+  <div class="topbar__in">
+    <a class="brand-link" href="index.html" aria-label="Ir al inicio">
+      <div class="brand">
+        <div class="logo-sm" aria-hidden="true">
+          <img src="https://lcreurope.com/wp-content/uploads/2025/10/Gemini_Generated_Image_sc2s83sc2s83sc2s-removebg-preview.png" alt="">
+        </div>
+        <span class="brand-name">Lcreurope</span>
+      </div>
+    </a>
+    <div class="right-actions">
+      <button class="btn-icon" id="btnMenu" aria-label="Abrir menú"><i class="fa fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer" id="drawer" aria-label="Menú principal">
+  <div class="d-top">
+    <a class="d-brand-link" href="index.html" aria-label="Ir al inicio">
+      <div class="d-brand">
+        <div class="logo-sm" aria-hidden="true">
+          <img src="https://lcreurope.com/wp-content/uploads/2025/10/Gemini_Generated_Image_sc2s83sc2s83sc2s-removebg-preview.png" alt="">
+        </div>
+        <span class="brand-name">Lcreurope</span>
+      </div>
+    </a>
+    <button class="d-close" id="btnClose" aria-label="Cerrar menú"><i class="fa fa-times"></i></button>
+  </div>
+  <nav class="menu" role="navigation">
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="apple.html">Apple</a></li>
+      <li><a href="samsung.html">Samsung</a></li>
+      <li><a href="xiaomi.html">Xiaomi</a></li>
+      <li><a href="honor.html">Honor</a></li>
+      <li><a href="motorola.html">Motorola</a></li>
+      <li><a href="zte.html">ZTE</a></li>
+      <li><a href="poco.html">Poco by xiaomi</a></li>
+      <li><a href="infinix.html">Infinix</a></li>
+      <li><a href="accesorios.html">Accesorios</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<aside id="leftHeader" class="left" aria-label="Encabezado izquierdo">
+  <a href="index.html" aria-label="Ir al inicio">
+    <img class="logo-lg" src="https://frutasalifruit.com/wp-content/uploads/grupoalifruit.png" alt="Alifruit – Sabor de la Tierra" />
+  </a>
+  <nav class="menu-d" aria-label="Menú principal">
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="apple.html">Apple</a></li>
+      <li><a href="samsung.html">Samsung</a></li>
+      <li><a href="xiaomi.html">Xiaomi</a></li>
+      <li><a href="honor.html">Honor</a></li>
+      <li><a href="motorola.html">Motorola</a></li>
+      <li><a href="zte.html">ZTE</a></li>
+      <li><a href="poco.html">Poco by xiaomi</a></li>
+      <li><a href="infinix.html">Infinix</a></li>
+      <li><a href="accesorios.html">accesorios</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+  </nav>
+  <div class="foot">
+    <div class="social">
+      <a class="fb" aria-label="Facebook" href="https://www.facebook.com/Grupo-Alifruit-Sabor-de-la-Tierra-1671097156478760/" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i></a>
+      <a class="yt" aria-label="YouTube" href="https://www.youtube.com/" target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i></a>
+    </div>
+    <div class="copy">
+      <div>Todos los derechos reservados</div>
+      <div>Lcreurope © 2025 | Diseño Web |</div>
+      <div><a href="http://guellcom.com/" target="_blank" rel="noopener">GuellCom_</a></div>
+    </div>
+  </div>
+</aside>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" aria-label="Imagen de cabecera">
+    <img id="heroImg" src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/2.png" alt="Banner principal">
+    <button class="hero__ctrl hero__prev" id="heroPrev" aria-label="Anterior"><i class="fa-solid fa-angle-left"></i></button>
+    <button class="hero__ctrl hero__next" id="heroNext" aria-label="Siguiente"><i class="fa-solid fa-angle-right"></i></button>
+    <div class="hero__dots" id="heroDots" aria-label="Selector de diapositivas"></div>
+  </section>
+
+  <!-- LISTADO APPLE -->
+  <section class="apple-page" aria-label="Productos Apple">
+    <div class="apple-wrap">
+      <!-- Filtro lateral desktop -->
+      <aside class="apple-filter">
+        <h3>Filtrar Por Precios</h3>
+        <div class="apple-range-track">
+          <div class="apple-range-fill"></div>
+        </div>
+
+        <div class="apple-filter-row">
+          <div class="apple-filter-label">
+            <span>Precio:</span>
+            <span>S/ 60 — S/ 4,650</span>
+          </div>
+          <button class="apple-filter-btn" type="button">Filtrar</button>
+        </div>
+
+        <hr class="apple-filter-divider">
+
+        <div class="apple-filter-section">
+          <span>RAM Memory</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </aside>
+
+      <!-- Productos -->
+      <div class="apple-products">
+        <!-- buscador -->
+        <div class="apple-search-row">
+          <div class="apple-search">
+            <input type="text" id="appleSearch" placeholder="Busca por equipos">
+            <button type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </div>
+        </div>
+
+        <div class="apple-breadcrumbs">
+          <span>Inicio</span>
+          <span>Apple</span>
+          <span>Página 2</span>
+        </div>
+
+        <div class="apple-toolbar">
+          <button class="apple-sidebar-toggle" type="button">
+            <i class="fa-solid fa-bars"></i>
+            <span>Show sidebar</span>
+          </button>
+
+          <div class="apple-sort">
+            <label class="sr-only" for="appleSort">Orden</label>
+            <select id="appleSort">
+              <option>Orden predeterminado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="apple-top-row">
+          <h1 class="apple-title">Apple</h1>
+          <div class="apple-results">Mostrando 1–12 de 12 resultados</div>
+        </div>
+
+        <div class="apple-grid" id="appleGrid">
+          <!-- 1 -->
+          <article class="apple-card" data-name="iphone 13 128gb">
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/iphone13.jpg" alt="iPhone 13 128GB">
+            </div>
+            <div class="apple-name">IPHONE 13 128GB</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price">S/ 1,780.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M38</div>
+          </article>
+
+          <!-- 2 -->
+          <article class="apple-card" data-name="iphone 13 128gb c">
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/iphone13.jpg" alt="iPhone 13 128GB C/">
+            </div>
+            <div class="apple-name">IPHONE 13 128GB C/</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price">S/ 1,880.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M38-1</div>
+          </article>
+
+          <!-- 3 -->
+          <article class="apple-card" data-name="iphone 14 128gb">
+            <span class="apple-card-badge">-14%</span>
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/IMG-7379865_724e53f6-580e-4c92-91b8-d2a47e4c6296-768x768.webp" alt="iPhone 14 128GB">
+            </div>
+            <div class="apple-name">IPHONE 14 128GB</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price"><del>S/ 2,350.00</del>S/ 2,030.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M39</div>
+          </article>
+
+          <!-- 4 -->
+          <article class="apple-card" data-name="iphone 14 128gb c cubo y">
+            <span class="apple-card-badge">-13%</span>
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/IMG-7379865_724e53f6-580e-4c92-91b8-d2a47e4c6296-768x768.webp" alt="iPhone 14 128GB C/CUBO Y">
+            </div>
+            <div class="apple-name">IPHONE 14 128GB C/CUBO Y</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price"><del>S/ 2,450.00</del>S/ 2,130.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M39-1</div>
+          </article>
+
+          <!-- 5 -->
+          <article class="apple-card" data-name="iphone 15 128gb">
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/15-768x768.webp" alt="iPhone 15 128GB">
+            </div>
+            <div class="apple-name">IPHONE 15 128GB</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price">S/ 2,520.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M41</div>
+          </article>
+
+          <!-- 6 -->
+          <article class="apple-card" data-name="iphone 15 128gb c">
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/15-768x768.webp" alt="iPhone 15 128GB C/">
+            </div>
+            <div class="apple-name">IPHONE 15 128GB C/</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price">S/ 2,620.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M41-1</div>
+          </article>
+
+          <!-- 7 -->
+          <article class="apple-card" data-name="iphone 16 128gb">
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/iphone161-768x768.png" alt="iPhone 16 128GB">
+            </div>
+            <div class="apple-name">IPHONE 16 128GB</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price">S/ 2,780.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M44</div>
+          </article>
+
+          <!-- 8 -->
+          <article class="apple-card" data-name="iphone 16 128gb c">
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/CELU1023NATURAL-TITANIO-256GB_0-600x600.jpg" alt="iPhone 16 128GB C/">
+            </div>
+            <div class="apple-name">IPHONE 16 128GB C/</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price">S/ 2,880.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M44-1</div>
+          </article>
+
+          <!-- 9 -->
+          <article class="apple-card" data-name="iphone 16 plus 128gb">
+            <span class="apple-card-badge">-15%</span>
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/iphone161-600x600.png" alt="iPhone 16 Plus 128GB">
+            </div>
+            <div class="apple-name">IPHONE 16 PLUS 128GB</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price"><del>S/ 3,780.00</del>S/ 3,220.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M45</div>
+          </article>
+
+          <!-- 10 -->
+          <article class="apple-card" data-name="iphone 16 plus 128gb c">
+            <span class="apple-card-badge">-14%</span>
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/iphone161-600x600.png" alt="iPhone 16 Plus 128GB C/">
+            </div>
+            <div class="apple-name">IPHONE 16 PLUS 128GB C/</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price"><del>S/ 3,880.00</del>S/ 3,320.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M45-1</div>
+          </article>
+
+          <!-- 11 -->
+          <article class="apple-card" data-name="iphone 16 pro 256gb">
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/Iphone-16-Pro-256gb.jpg" alt="iPhone 16 Pro 256GB">
+            </div>
+            <div class="apple-name">IPHONE 16 PRO 256GB</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price">S/ 4,180.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M46</div>
+          </article>
+
+          <!-- 12 -->
+          <article class="apple-card" data-name="iphone 16 pro 256gb c">
+            <div class="apple-img">
+              <img src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/CELU1023NATURAL-TITANIO-256GB_0-600x600.jpg" alt="iPhone 16 Pro 256GB C/">
+            </div>
+            <div class="apple-name">IPHONE 16 PRO 256GB C/</div>
+            <div class="apple-brand">Apple, Equipos</div>
+            <div class="apple-stars">
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <div class="apple-stock"><i class="fa-solid fa-check"></i>En Stock</div>
+            <div class="apple-price">S/ 4,280.00</div>
+            <button class="apple-btn" type="button"><i class="fa-solid fa-cart-plus"></i>Añadir Al Carrito</button>
+            <div class="apple-sku">SKU: M46-1</div>
+          </article>
+        </div>
+
+        <!-- PAGINACIÓN 1 2 3 > -->
+        <div class="apple-pagination" aria-label="Paginación">
+          <button class="apple-page-btn is-active" type="button">1</button>
+          <button class="apple-page-btn" type="button">2</button>
+          <button class="apple-page-btn" type="button">3</button>
+          <button class="apple-page-btn" type="button">
+            <i class="fa-solid fa-angle-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-news" role="region" aria-label="Mantente informado">
+    <span>¡Mantente informado!</span>
+    <div class="icons">
+      <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+    </div>
+  </div>
+
+  <section class="ff-grid">
+    <div class="ff-wrap">
+      <div class="ff-products">
+        <h3 class="ff-title">Celulares</h3>
+        <ul class="ff-list">
+          <li><a href="apple.html">Apple</a></li>
+          <li><a href="samsung.html">Samsung</a></li>
+          <li><a href="xiaomi.html">Xiaomi</a></li>
+          <li><a href="honor.html">Honor</a></li>
+          <li><a href="motorola.html">Motorola</a></li>
+          <li><a href="zte.html">ZTE</a></li>
+          <li><a href="poco.html">Poco by xiaomi</a></li>
+          <li><a href="infinix.html">Infinix</a></li>
+        </ul>
+      </div>
+
+      <div class="ff-about">
+        <h3 class="ff-title">Sobre Nosotros</h3>
+        <ul class="ff-list">
+          <li><a href="somos.html">Quiénes Somos</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="certificaciones.html">Certificaciones</a></li>
+          <li><a href="calidad.html">Calidad</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="ff-brand">
+        <div class="brand-box">
+          <img src="https://frutasalifruit.com/wp-content/uploads/grupoalifruit.png" alt="Logo">
+          <div class="social" aria-label="Redes sociales">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="ff-contact">
+        <h3 class="ff-title">Contacto</h3>
+        <div class="contact">
+          <div class="ci">
+            <span class="round"><i class="fa-solid fa-phone-volume"></i></span>
+            <div><a href="tel:+51902188353">+51 902 188 353</a></div>
+          </div>
+          <div class="ci">
+            <span class="round"><i class="fa-solid fa-envelope"></i></span>
+            <div><a href="mailto:info@freshfruitturkey.com">info@freshfruitturkey.com</a></div>
+          </div>
+          <div class="ci">
+            <span class="round"><i class="fa-solid fa-location-dot"></i></span>
+            <div>Güzeloba Mah. Çağlayangil Cad. No: 3B, 07230<br>Muratpaşa / Antalya</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer-legal">
+    <div class="links">
+      <a href="#">Términos y condiciones</a>
+      <a href="#">Política de cookies</a>
+      <a href="#">Política de privacidad</a>
+    </div>
+    <div class="country">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+  </section>
+</footer>
+
+<div class="ticker" role="region" aria-label="Avisos y contacto">
+  <div class="ticker__track">
+    <div class="ticker__inner">
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+    </div>
+    <div class="ticker__inner" aria-hidden="true">
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+      <span class="ticker__item">SERVICIO ESPECIAL USUARIO 24h</span><span class="ticker__sep">→</span>
+      <a class="ticker__item" href="https://wa.me/51910064458" target="_blank" rel="noopener">T +51&nbsp;910&nbsp;064&nbsp;458</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== Drawer =====
+  const drawer = document.getElementById('drawer');
+  const scrim = document.getElementById('scrim');
+  const btnMenu = document.getElementById('btnMenu');
+  const btnClose = document.getElementById('btnClose');
+  const openDrawer = () => { drawer?.classList.add('open'); scrim?.classList.add('open'); };
+  const closeDrawer = () => { drawer?.classList.remove('open'); scrim?.classList.remove('open'); };
+  btnMenu?.addEventListener('click', openDrawer);
+  btnClose?.addEventListener('click', closeDrawer);
+  scrim?.addEventListener('click', closeDrawer);
+  drawer?.querySelectorAll('a')?.forEach(a => a.addEventListener('click', closeDrawer));
+
+  // ===== Slider =====
+  const heroImg = document.getElementById('heroImg');
+  const heroDotsContainer = document.getElementById('heroDots');
+  const btnPrev = document.getElementById('heroPrev');
+  const btnNext = document.getElementById('heroNext');
+
+  const heroSrcs = [
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/CYBER-KYS-WEB-02.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/1-1.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/2.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/3.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/4.png",
+    "https://kyscomunicaciones.com/wp-content/uploads/2025/05/5.png",
+  ];
+
+  let currentIndex = 0;
+  let sliderTimer = null;
+
+  heroSrcs.forEach(src => { const img = new Image(); img.src = src; });
+
+  const dots = [];
+  heroSrcs.forEach((_, idx) => {
+    const dot = document.createElement('button');
+    dot.className = 'hero__dot' + (idx === 0 ? ' is-active' : '');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', 'Ir a la imagen ' + (idx + 1));
+    dot.addEventListener('click', () => goToSlide(idx, true));
+    heroDotsContainer?.appendChild(dot);
+    dots.push(dot);
+  });
+
+  function updateDots(index){ dots.forEach((d,i)=> d.classList.toggle('is-active', i===index)); }
+  function goToSlide(index, stopAuto){
+    currentIndex = (index + heroSrcs.length) % heroSrcs.length;
+    if (heroImg) heroImg.src = heroSrcs[currentIndex];
+    updateDots(currentIndex);
+    if (stopAuto) restartAuto();
+  }
+  btnPrev?.addEventListener('click', () => goToSlide(currentIndex - 1, true));
+  btnNext?.addEventListener('click', () => goToSlide(currentIndex + 1, true));
+
+  function startAuto(){ sliderTimer = setInterval(() => goToSlide(currentIndex + 1, false), 2000); }
+  function restartAuto(){ if (sliderTimer) clearInterval(sliderTimer); startAuto(); }
+  startAuto();
+
+  // ===== Buscador (filtra tarjetas por nombre) =====
+  const searchInput = document.getElementById('appleSearch');
+  const searchBtn = document.querySelector('.apple-search button');
+  const cards = Array.from(document.querySelectorAll('.apple-card'));
+  const resultsLabel = document.querySelector('.apple-results');
+
+  function updateSearch(){
+    const q = searchInput.value.trim().toLowerCase();
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const name = card.dataset.name || card.querySelector('.apple-name')?.textContent.toLowerCase() || '';
+      const show = !q || name.includes(q);
+      card.style.display = show ? '' : 'none';
+      if(show) visibleCount++;
+    });
+
+    if(resultsLabel){
+      resultsLabel.textContent = `Mostrando ${visibleCount} de ${cards.length} resultados`;
+    }
+  }
+
+  if(searchInput){
+    searchInput.addEventListener('input', updateSearch);
+  }
+  if(searchBtn){
+    searchBtn.addEventListener('click', updateSearch);
+  }
+</script>
+</body>
+</html>
