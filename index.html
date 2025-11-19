@@ -153,7 +153,7 @@
   a,button{-webkit-tap-highlight-color:transparent}
   a:focus,button:focus{outline:none}
 
-  /* ============ ZONA PRODUCTOS ============ */
+  /* ============ ZONA PRODUCTOS GENERAL ============ */
   :root{
     --za-title-fs:26px;
     --za-ver-todos-w:120.83px; --za-ver-todos-h:42px; --za-ver-todos-fs:13px;
@@ -163,8 +163,25 @@
     --za-btn-w:210.63px; --za-btn-h:42px; --za-btn-fs:15px;
     --za-purple:#8a2be2; --za-purple-strong:#7f2ed9; --za-price:#7f54ff; --za-blue:#1e40af;
   }
-  .zone-apple-wrap,.zone-android-wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 14px;position:relative;z-index:1;}
-  @media (min-width:1024px){.zone-apple-wrap,.zone-android-wrap{margin-left:85px;padding-left:0}}
+  .zone-apple-wrap,
+  .zone-android-wrap,
+  .zone-accesorios-wrap{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 14px;
+    position:relative;
+    z-index:1;
+  }
+  @media (min-width:1024px){
+    .zone-apple-wrap,
+    .zone-android-wrap,
+    .zone-accesorios-wrap{
+      margin-left:85px;
+      padding-left:0;
+    }
+  }
+
   .za-grid{display:grid;gap:22px;grid-template-columns:1fr}
   @media (min-width:1024px){.za-grid{grid-template-columns: var(--za-promo-w) 1fr;align-items:start}}
 
@@ -188,7 +205,27 @@
   @media (min-width:1024px){ .za-cards{grid-template-columns:repeat(4,1fr)} }
 
   .za-card{border:1px solid #ececf1;border-radius:14px;background:#fff;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 4px 16px rgba(17,17,26,.05);position:relative;z-index:1}
-  .za-thumb{width:var(--za-card-img);height:var(--za-card-img);margin:6px auto 8px;display:block;object-fit:contain}
+
+  /* CONTENEDOR QUE FIJA LA POSICIÓN DE LAS IMÁGENES */
+  .za-thumb-wrap{
+    width:var(--za-card-img);
+    height:var(--za-card-img);
+    margin:6px auto 8px;
+    position:relative;
+  }
+  .za-thumb-wrap img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    transition:opacity .3s ease-in-out;
+    display:block;
+  }
+  .za-thumb-hover{opacity:0;}
+  .za-card:hover .za-thumb-hover{opacity:1;}
+  .za-card:hover .za-thumb{opacity:0;}
+
   .za-name{font-size:var(--za-name-fs);font-weight:800;line-height:1.12;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:calc(1.12em * 2);}
   .za-brand{font-size:var(--za-brand-fs);color:#7a7a7a;font-weight:600}
   .za-stars{width:var(--za-stars-w);height:var(--za-stars-h);display:flex;align-items:center;justify-content:space-between}
@@ -208,29 +245,46 @@
     }
   }
 
-  .thumb-clickable { cursor: pointer; outline: none; }
-  .thumb-clickable:focus { outline: 2px solid #1d4ed8; outline-offset: 2px; }
+  .thumb-clickable { cursor:pointer; outline:none; }
+  .thumb-clickable:focus { outline:none; }
 
   .badge-off{position:absolute; top:12px; left:12px; padding:6px 10px; border-radius:10px; font-weight:800; font-size:12px; color:#fff; background:#8a2be2; box-shadow:0 4px 10px rgba(0,0,0,.12);}
 
-  /* ====== OVERRIDE DE TAMAÑOS SOLO PARA ACCESORIOS ====== */
-  /* (ANTES hacía las tarjetas muy grandes. Ahora igual que Apple/Android) */
-  .zone-accesorios .za-cards { justify-items:stretch; } /* ocupar todo el ancho */
+  /* ====== OVERRIDES SOLO PARA ACCESORIOS ====== */
+  .zone-accesorios .za-head{
+    margin-top:32px;
+    margin-bottom:18px;
+  }
 
-  /* NUEVO: Desktop = exactamente 5 tarjetas en una fila y alineadas a la derecha igual que Android */
+  .zone-accesorios .za-cards{
+    justify-items:stretch;
+  }
+
+  /* DESKTOP: 5 columnas fluidas → último card y "Ver Todos" alineados al mismo canto derecho */
   @media (min-width:1024px){
-    .zone-accesorios .za-cards { grid-template-columns: repeat(5, minmax(0,1fr)); }
+    .zone-accesorios .za-cards{
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      justify-content:space-between;
+    }
+    .zone-accesorios .za-card{
+      width:auto;
+    }
   }
 
-  /* NUEVO: Tablet = 3 por fila, sin forzar width fijo (arregla el bug del tamaño gigante) */
+  /* TABLET */
   @media (min-width:768px) and (max-width:1023.98px){
-    .zone-accesorios .za-cards { grid-template-columns: repeat(3, minmax(0,1fr)); }
-    .zone-accesorios .za-card{ width:auto !important; min-height:auto !important; }
+    .zone-accesorios .za-cards{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .zone-accesorios .za-card{width:auto !important;min-height:auto !important;}
   }
 
-  /* NUEVO: Móvil = 2 por fila (consistente con las otras zonas) */
+  /* MÓVIL */
   @media (max-width:767.98px){
-    .zone-accesorios .za-cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .zone-accesorios .za-cards{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+
+  /* espacio de 20px bajo el nombre SOLO en accesorios */
+  .zone-accesorios .za-name{
+    margin-bottom:20px;
   }
 </style>
 </head>
@@ -342,43 +396,73 @@
           </div>
 
           <div class="za-cards">
+            <!-- iPhone 17 Pro Max -->
             <article class="za-card">
-              <img class="za-thumb" src="https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone17-pro-max_cosmic-orange_pm.png" alt="iPhone 16 Pro Max 256GB">
+              <div class="za-thumb-wrap">
+                <img class="za-thumb" src="https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone17-pro-max_cosmic-orange_pm.png" alt="iPhone 17 Pro Max 256GB">
+                <img class="za-thumb-hover" src="https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone17-pro_silver_pm.png" alt="Hover iPhone 17 Pro Max">
+              </div>
               <div class="za-name">IPHONE 17 PRO MAX 256GB</div>
               <div class="za-brand">Apple, Equipos</div>
               <div class="za-stars" aria-label="0 estrellas">
-                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
               </div>
               <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
               <div class="za-price">S/ 6,150.00</div>
               <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
             </article>
 
+            <!-- iPhone 16 Pro Max 256GB -->
             <article class="za-card">
-              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/CELU1023NATURAL-TITANIO-256GB_0-600x600.jpg" alt="iPhone 16 Pro Max 256GB">
+              <div class="za-thumb-wrap">
+                <img class="za-thumb" src="https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone16pro_black_pm.png" alt="iPhone 16 Pro Max 256GB">
+                <img class="za-thumb-hover" src="https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone16pro_desert_pm.png" alt="Hover iPhone 16 Pro Max 256GB">
+              </div>
               <div class="za-name">IPHONE 16 PRO MAX 256GB</div>
               <div class="za-brand">Apple, Equipos</div>
-              <div class="za-stars"><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i></div>
+              <div class="za-stars">
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+              </div>
               <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
               <div class="za-price">S/ 4,550.00</div>
               <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
             </article>
 
+            <!-- iPhone 17 256 -->
             <article class="za-card">
-              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/CELU1023NATURAL-TITANIO-256GB_0-600x600.jpg" alt="iPhone 16 Pro Max">
-              <div class="za-name">IPHONE 16 PRO MAX</div>
+              <div class="za-thumb-wrap">
+                <img class="za-thumb" src="https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone17_mistblue_pm.png" alt="iPhone 17 256">
+                <img class="za-thumb-hover" src="https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone17_black_pm.png" alt="Hover iPhone 17 256">
+              </div>
+              <div class="za-name">IPHONE 17 256</div>
               <div class="za-brand">Apple, Equipos</div>
-              <div class="za-stars"><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i></div>
+              <div class="za-stars">
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+              </div>
               <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
               <div class="za-price">S/ 4,350.00</div>
               <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
             </article>
 
+            <!-- iPhone Air 256GB -->
             <article class="za-card">
-              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/05/CELU1023NATURAL-TITANIO-256GB_0-600x600.jpg" alt="iPhone 16 Pro 256GB">
-              <div class="za-name">IPHONE 16 PRO 256GB</div>
+              <div class="za-thumb-wrap">
+                <img class="za-thumb" src="https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone-air_black_pm.png" alt="iPhone Air Pro 256GB">
+                <img class="za-thumb-hover" src="https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone-air_skyblue_pm.png" alt="iPhone Air Pro 256GB">
+              </div>
+              <div class="za-name">IPHONE Air 256GB</div>
               <div class="za-brand">Apple, Equipos</div>
-              <div class="za-stars"><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i></div>
+              <div class="za-stars">
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+              </div>
               <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
               <div class="za-price">S/ 4,280.00</div>
               <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
@@ -406,8 +490,12 @@
           </div>
 
           <div class="za-cards">
+            <!-- Xiaomi 17 Pro Max -->
             <article class="za-card">
-              <img class="za-thumb" src="https://storage.comprasmartphone.com/smartphones/xiaomi-17-pro-max.png" alt="Xiaomi 15 Ultra">
+              <div class="za-thumb-wrap">
+                <img class="za-thumb" src="https://storage.comprasmartphone.com/smartphones/xiaomi-17-pro-max.png" alt="Xiaomi 17 Pro Max">
+                <img class="za-thumb-hover" src="https://via.placeholder.com/400x400/ff0000/ffffff?text=XIAOMI+17+HOVER" alt="Hover Xiaomi 17 Pro Max">
+              </div>
               <div class="za-name">XIAOMI 17 PRO MAX</div>
               <div class="za-brand">Equipos, Xiaomi</div>
               <div class="za-stars" aria-label="0 estrellas">
@@ -418,37 +506,55 @@
               <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
             </article>
 
+            <!-- Xiaomi 15 Ultra -->
             <article class="za-card">
-              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/06/xiaomi-15-ultra-nuevo-768x768.jpg" alt="Xiaomi 15 Ultra">
+              <div class="za-thumb-wrap">
+                <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/06/xiaomi-15-ultra-nuevo-768x768.jpg" alt="Xiaomi 15 Ultra">
+                <img class="za-thumb-hover" src="https://rimage.ripley.com.pe/home.ripley/Attachment/MKP/3325/PMP20001109573/full_image-3.jpeg" alt="Hover Xiaomi 15 Ultra">
+              </div>
               <div class="za-name">XIAOMI 15 ULTRA</div>
               <div class="za-brand">Equipos, Xiaomi</div>
               <div class="za-stars">
-                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
               </div>
               <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
               <div class="za-price">S/ 4,180.00</div>
               <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
             </article>
 
+            <!-- S25 ULTRA -->
             <article class="za-card">
               <span class="badge-off">-6%</span>
-              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/S25-ultra-5g-512gb12ram.webp" alt="Samsung Galaxy S25 Ultra 5G 512GB/12GB RAM">
+              <div class="za-thumb-wrap">
+                <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/S25-ultra-5g-512gb12ram.webp" alt="Samsung Galaxy S25 Ultra 5G 512GB/12GB RAM">
+                <img class="za-thumb-hover" src="https://via.placeholder.com/400x400/6600ff/ffffff?text=S25+HOVER" alt="Hover Samsung S25 Ultra">
+              </div>
               <div class="za-name">S25 ULTRA 5G 512GB/12RAM</div>
               <div class="za-brand">Equipos, Samsung</div>
               <div class="za-stars">
-                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
               </div>
               <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
               <div class="za-price"><span style="opacity:.55;text-decoration:line-through;margin-right:6px;">S/ 4,080.00</span> S/ 3,840.00</div>
               <button class="za-btn" type="button"><i class="fa-solid fa-cart-plus"></i> Añadir Al Carrito</button>
             </article>
 
+            <!-- Honor Magic 7 Pro -->
             <article class="za-card">
-              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/04/MAGIC-7-PRO_Mesa-de-trabajo-1-768x768.png" alt="HONOR Magic 7 Pro">
+              <div class="za-thumb-wrap">
+                <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/04/MAGIC-7-PRO_Mesa-de-trabajo-1-768x768.png" alt="HONOR Magic 7 Pro">
+                <img class="za-thumb-hover" src="https://via.placeholder.com/400x400/00ff99/000000?text=MAGIC+HOVER" alt="Hover Honor Magic 7 Pro">
+              </div>
               <div class="za-name">HONOR MAGIC 7 PRO</div>
               <div class="za-brand">Equipos, Honor</div>
               <div class="za-stars">
-                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
               </div>
               <div class="za-stock"><i class="fa-solid fa-check"></i> En Stock</div>
               <div class="za-price">S/ 3,750.00</div>
@@ -461,7 +567,7 @@
   </section>
 
   <!-- ============ ZONA ACCESORIOS ============ -->
-  <section class="zone-apple-wrap" aria-label="Accesorios" style="margin-top:18px;">
+  <section class="zone-accesorios-wrap" aria-label="Accesorios">
     <div class="zone-accesorios">
       <div class="za-right">
         <div class="za-head">
@@ -472,7 +578,9 @@
         <div class="za-cards">
           <!-- Apple Watch SE 2da GEN -->
           <article class="za-card">
-            <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/06/imageUrl_1.png" alt="Apple Watch SE 2da Gen">
+            <div class="za-thumb-wrap">
+              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/06/imageUrl_1.png" alt="Apple Watch SE 2da Gen">
+            </div>
             <div class="za-name">APPLE WATCH SE 2da GEN</div>
             <div class="za-brand">Accesorios, Apple</div>
             <div class="za-stars" aria-label="0 estrellas">
@@ -485,7 +593,9 @@
 
           <!-- Apple Watch Serie 10 46mm -->
           <article class="za-card">
-            <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/06/w1500h1500fitpad-1.webp" alt="Apple Watch Serie 10 46mm">
+            <div class="za-thumb-wrap">
+              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/06/w1500h1500fitpad-1.webp" alt="Apple Watch Serie 10 46mm">
+            </div>
             <div class="za-name">APPLE WATCH SERIE 10 46MM</div>
             <div class="za-brand">Accesorios, Apple</div>
             <div class="za-stars">
@@ -498,7 +608,9 @@
 
           <!-- Apple Watch Serie 9 45mm -->
           <article class="za-card">
-            <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/apple-wacht_Mesa-de-trabajo-1-2048x2048.png" alt="Apple Watch Serie 9 45mm">
+            <div class="za-thumb-wrap">
+              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/apple-wacht_Mesa-de-trabajo-1-2048x2048.png" alt="Apple Watch Serie 9 45mm">
+            </div>
             <div class="za-name">APPLE WATCH SERIE 9 45MM</div>
             <div class="za-brand">Accesorios, Apple</div>
             <div class="za-stars">
@@ -511,7 +623,9 @@
 
           <!-- Audífono AKG c/cable -->
           <article class="za-card">
-            <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/aud-kg_Mesa-de-trabajo-1-1536x1536.png" alt="Audífono AKG con cable">
+            <div class="za-thumb-wrap">
+              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/aud-kg_Mesa-de-trabajo-1-1536x1536.png" alt="Audífono AKG con cable">
+            </div>
             <div class="za-name">AUDIFONO AKG C/CABLE</div>
             <div class="za-brand">Accesorios, Samsung</div>
             <div class="za-stars">
@@ -525,7 +639,9 @@
           <!-- Audífono de iPhone -->
           <article class="za-card">
             <span class="badge-off">-25%</span>
-            <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/aud-iphone-c_Mesa-de-trabajo-1-1536x1536.png" alt="Audífono de iPhone con conector">
+            <div class="za-thumb-wrap">
+              <img class="za-thumb" src="https://kyscomunicaciones.com/wp-content/uploads/2025/02/aud-iphone-c_Mesa-de-trabajo-1-1536x1536.png" alt="Audífono de iPhone con conector">
+            </div>
             <div class="za-name">AUDIFONO DE IPHONE entrada</div>
             <div class="za-brand">Accesorios, Apple</div>
             <div class="za-stars">
@@ -700,20 +816,21 @@
   function restartAuto(){ if (sliderTimer) clearInterval(sliderTimer); startAuto(); }
   startAuto();
 
-  // ===== Imagen de producto como botón =====
+  // ===== Imagen de producto como botón SOLO en Apple y Android =====
   function attachThumbAsButton(){
-    document.querySelectorAll('.za-card .za-thumb').forEach(img => {
-      img.setAttribute('role','button');
-      img.setAttribute('tabindex','0');
-      img.classList.add('thumb-clickable');
-      const card = img.closest('.za-card');
-      const actionBtn = card?.querySelector('.za-btn');
-      const trigger = () => actionBtn?.click();
-      img.addEventListener('click', trigger);
-      img.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger(); }
+    document.querySelectorAll('.zone-apple .za-card .za-thumb, .zone-android .za-card .za-thumb')
+      .forEach(img => {
+        img.setAttribute('role','button');
+        img.setAttribute('tabindex','0');
+        img.classList.add('thumb-clickable');
+        const card = img.closest('.za-card');
+        const actionBtn = card?.querySelector('.za-btn');
+        const trigger = () => actionBtn?.click();
+        img.addEventListener('click', trigger);
+        img.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger(); }
+        });
       });
-    });
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', attachThumbAsButton);
